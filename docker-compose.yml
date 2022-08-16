@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  discordbot0:
+    image: discordbot0
+    build:
+      context: .
+      dockerfile: ./Dockerfile
