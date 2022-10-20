@@ -1,6 +1,13 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,dotenv
 
+#example folder
+examples/
+prove/
+
+#google cloud
+extactScreenWorking.py
+
 ### dotenv ###
 .env
 
