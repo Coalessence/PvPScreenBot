@@ -1,8 +1,5 @@
-from extractScreen import DofusScreenExtractor
-path_to_tesseract = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
-path_to_images = 'examples\\9.png'
-conf= "--psm 6 -l eng+ita+fra+rus"
+from DofusBot import client
 
-dse = DofusScreenExtractor(path_to_tesseract, conf)
+#change this to add servers in env pls or just go global
 
-print(dse.extractMain(path_to_images))
+client.run()

@@ -1,7 +1,10 @@
 from pytesseract import pytesseract
 import cv2 as cv
 import numpy as np
+from urllib.request import Request, urlopen
 import re
+import asyncio
+
 
 class DofusScreenExtractor:
     
@@ -22,15 +25,17 @@ class DofusScreenExtractor:
 
         res=re.sub('[^A-Za-z-\[\] \n\'аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]+', '', text)
 
-        res=res.replace("'", " ")
+        res=res.replace("'", "' ")
 
         res=res.split()
 
-        if "Do" in res:
+        if "Do'" in res:
             
-            percePos=res.index("Do")
+            percePos=res.index("Do'")
 
-            del res[(percePos-1):(percePos+2)]
+            res[percePos-1]="Perce"
+            
+            del res[(percePos):(percePos+2)]
 
         res = [x for x in res if len(x) > 2]
 
@@ -39,9 +44,13 @@ class DofusScreenExtractor:
             
         return res
 
-    def extractMain(self, path_to_images):
+    async def extractMain(self, url):
 
-        img = cv.imread(path_to_images)
+        #img = cv.imread(path_to_images)
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        img = np.asarray(bytearray(urlopen(req).read()), dtype="uint8")
+        img = cv.imdecode(img, cv.IMREAD_COLOR)
+        
         (h, w) = img.shape[: 2]
 
         img = cv.resize(img, (w * 2, h * 2), cv.INTER_LINEAR)
