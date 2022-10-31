@@ -5,7 +5,9 @@ from urllib.request import Request, urlopen
 import re
 import asyncio
 
-
+FIRST=["Vittoria", "Sconfitta", "Victory", "Victoire", "Defeat", "Défaite"]
+WINNERS=["Vincitori", "Gagnants"]
+LOSERS=["Sconfitti", "Perdants"]
 class DofusScreenExtractor:
     
     def __init__(self, path_to_tesseract, conf):
@@ -24,14 +26,21 @@ class DofusScreenExtractor:
         text = pytesseract.image_to_string(img, config=self.conf)
 
         res=re.sub('[^A-Za-z-\[\] \n\'аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]+', '', text)
-
+        
         res=res.replace("'", "' ")
 
         res=res.split()
 
         if "Do'" in res:
-            
             percePos=res.index("Do'")
+
+            res[percePos-1]="Perce"
+            
+            del res[(percePos):(percePos+2)]
+            
+        elif "Do" in res:
+            
+            percePos=res.index("Do")
 
             res[percePos-1]="Perce"
             
@@ -46,9 +55,10 @@ class DofusScreenExtractor:
 
     async def extractMain(self, url):
 
-        #img = cv.imread(path_to_images)
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        img = np.asarray(bytearray(urlopen(req).read()), dtype="uint8")
+        #img = cv.imread(url)
+        #req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        #img = np.asarray(bytearray(urlopen(req).read()), dtype="uint8")
+        img = np.asarray(bytearray(url), dtype="uint8")
         img = cv.imdecode(img, cv.IMREAD_COLOR)
         
         (h, w) = img.shape[: 2]
@@ -64,12 +74,16 @@ class DofusScreenExtractor:
         #prepare the second image, apply tozero and then not
         __ ,img2 = cv.threshold(img,127,255,cv.THRESH_TOZERO)
         img2 =cv.bitwise_not(img2)
+        img2 = cv.erode(img2, kernel, iterations=1)
 
         #extract the two text from the image and process them with regex
         res1=self.extractPrepare(img1)
         res2=self.extractPrepare(img2)
-
+            
         #take only intersection
         res= self.intersection(res1, res2)
 
+        if res[0] in FIRST:
+            del res[0]
+        
         return res
