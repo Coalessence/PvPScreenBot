@@ -4,6 +4,7 @@
 #example folder
 examples/
 prove/
+test.py
 
 #google cloud
 extactScreenWorking.py

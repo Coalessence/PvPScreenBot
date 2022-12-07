@@ -1,5 +1,6 @@
 {
     "configurations": [
+        
         {
             "name": "Docker: Python - General",
             "type": "docker",
@@ -14,6 +15,13 @@
                 ],
                 "projectType": "general"
             }
+        },
+        {
+            "name": "Python: File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "justMyCode": true
         }
     ]
 }
