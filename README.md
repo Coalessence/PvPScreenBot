@@ -1,7 +1,7 @@
 PvPScreenBot 🎮🤖
 Overview
 
-PvPScreenBot is a Python-based automation tool, running inside Docker, designed for real-time PvP screen extraction and processing. Ideal for Twitch streaming, game review automation, or PvP data analysis, it captures screen elements and processes them for downstream usage.
+PvPScreenBot is a Python-based automation tool, running inside Docker, designed for real-time PvP screen extraction and processing. Ideal for  game review automation and PvP data analysis, it captures screen elements and processes them for downstream usage.
 Features
 
     Screen capture & analysis: Extracts relevant screen regions using image processing.
